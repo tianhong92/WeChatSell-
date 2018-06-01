@@ -13,13 +13,13 @@ public class ResultVOUtil {
     }
 
     public static ResultVO success() {
-        return success(null);    
+        return success(null);
     }
 
     public static ResultVO error(Integer code, String msg) {
-            ResultVO resultVO = new ResultVO();
-            resultVO.setCode(code);
-            resultVO.setMsg(msg);
-            return resultVO;
+        ResultVO resultVO = new ResultVO();
+        resultVO.setCode(code);
+        resultVO.setMsg(msg);
+        return resultVO;
     }
 }
