@@ -19,6 +19,7 @@ public interface ProductService {
 
     // 加库存
 
+    void increaseStock(List<>)
 
     // 减库存
 
