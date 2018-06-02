@@ -3,6 +3,7 @@ package com.tianhong.service.impl;
 import com.tianhong.dataobject.OrderDetail;
 import com.tianhong.dataobject.OrderMaster;
 import com.tianhong.dataobject.ProductInfo;
+import com.tianhong.dto.CartDTO;
 import com.tianhong.dto.OrderDTO;
 import com.tianhong.enums.ResultEnum;
 import com.tianhong.exception.SellException;
@@ -17,8 +18,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -33,9 +37,11 @@ public class OrderServiceImpl implements OrderService {
     private OrderMasterRepository orderMasterRepository;
 
     @Override
+    @Transactional
     public OrderDTO create(OrderDTO orderDTO) {
 
         String orderId = KeyUtil.genUniqueKey();
+        // 订单总价
         BigDecimal orderAmount = new BigDecimal(BigInteger.ZERO);
 
         // 1. 查询商品（剩余数量， 价格）
@@ -68,9 +74,13 @@ public class OrderServiceImpl implements OrderService {
         orderMasterRepository.save(orderMaster);
 
         // 4. 扣库存
+        List<CartDTO> cartDTOList = orderDTO.getOrderDetailList().stream().map(e ->
+                new CartDTO(e.getProductId(), e.getProductQuantity())
+        ).collect(Collectors.toList());
 
+        productService.decreateStock(cartDTOList);
 
-        return null;
+        return orderDTO;
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.tianhong.dto;
 
+import lombok.Getter;
+
+@Getter
 public class CartDTO {
     // 商品id
     private String productId;
