@@ -1,15 +1,13 @@
 package com.tianhong.dto;
 
 import com.tianhong.dataobject.OrderDetail;
-import com.tianhong.enums.OrderStatusEnum;
-import com.tianhong.enums.PayStatusEnum;
-import lombok.Getter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-@Getter
+@Data
 public class OrderDTO {
 
     // 订单ID

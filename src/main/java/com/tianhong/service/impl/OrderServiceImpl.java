@@ -5,6 +5,8 @@ import com.tianhong.dataobject.OrderMaster;
 import com.tianhong.dataobject.ProductInfo;
 import com.tianhong.dto.CartDTO;
 import com.tianhong.dto.OrderDTO;
+import com.tianhong.enums.OrderStatusEnum;
+import com.tianhong.enums.PayStatusEnum;
 import com.tianhong.enums.ResultEnum;
 import com.tianhong.exception.SellException;
 import com.tianhong.repository.OrderDetailRepository;
@@ -52,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             // 2. 计算总价
-            orderAmount = orderDetail.getProductPrice()
+            orderAmount = productInfo.getProductPrice()
                     .multiply(new BigDecimal((orderDetail.getProductQuantity())))
                     .add(orderAmount);
 
@@ -68,9 +70,11 @@ public class OrderServiceImpl implements OrderService {
 
         // order master
         OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDTO, orderMaster);
         orderMaster.setOrderId(orderId);
         orderMaster.setOrderAmount(orderAmount);
-        BeanUtils.copyProperties(orderDTO, orderMaster);
+        orderMaster.setOrderStatus(OrderStatusEnum.NEW.getCode());
+        orderMaster.setPayStatus(PayStatusEnum.WAIT.getCode());
         orderMasterRepository.save(orderMaster);
 
         // 4. 扣库存

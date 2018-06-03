@@ -49,6 +49,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    // TODO： 多线程超卖现象
     public void decreateStock(List<CartDTO> cartDTOList) {
         for (CartDTO cartDTO : cartDTOList) {
             ProductInfo productInfo = repository.findOne(cartDTO.getProductId());
